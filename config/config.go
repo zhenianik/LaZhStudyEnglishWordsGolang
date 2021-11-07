@@ -4,36 +4,48 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/viper"
+	"log"
 	"os"
 	"path/filepath"
+	"sync"
+)
+
+var (
+	config Config
+	once   sync.Once
 )
 
 type Config struct {
-	JdbcDriver          string `mapstructure:"JDBC_DRIVER"`
-	JdbcUrl             string `mapstructure:"JDBC_URL"`
-	JdbcUsername        string `mapstructure:"JDBC_USERNAME"`
-	JdbcPassword        string `mapstructure:"JDBC_PASSWORD"`
+	Dbhost              string `mapstructure:"DBHOST"`
+	Dbname              string `mapstructure:"DBNAME"`
+	Dbuser              string `mapstructure:"DBUSER"`
+	Dbpass              string `mapstructure:"DBPASS"`
+	Dbport              string `mapstructure:"DBPORT"`
 	TelegramBotToken    string `mapstructure:"TELEGRAM_BOT_TOKEN"`
 	TelegramBotUsername string `mapstructure:"TELEGRAM_BOT_USERNAME"`
+	TranslateUrl        string `mapstructure:"TRANSLATE_URL"`
 }
 
-func GetConfig() (Config, error) {
+func GetConfig() (*Config, error) {
 
 	var err error
 
-	viper.SetDefault("config", "config.yaml")
-	viper.AutomaticEnv()
+	once.Do(func() {
 
-	config := Config{}
+		viper.SetDefault("config", "config.yaml")
+		viper.AutomaticEnv()
 
-	if err := ParseYamlConfig(&config, "config"); err != nil {
-		return config, err
-	}
+		config = Config{}
 
-	return config, err
+		if err = parseYamlConfig(&config, "config"); err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	return &config, err
 }
 
-func ParseYamlConfig(cfg interface{}, viperConfigName string) error {
+func parseYamlConfig(cfg interface{}, viperConfigName string) error {
 	filePath := viper.GetString(viperConfigName)
 	if len(filePath) == 0 {
 		return errors.New("config file not found")
