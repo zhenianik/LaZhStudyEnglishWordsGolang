@@ -1,6 +1,9 @@
-package wordsUtil
+package SqlQueries
 
-import "strings"
+import (
+	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/internal/wordsUtil"
+	"strings"
+)
 
 func GetRandomVideo() string {
 	return "SELECT tb1.word, tb1.translate1, tb1.translate2, tb1.translate3, tb1.translate4, tb1.context from words AS tb1 " +
@@ -33,7 +36,7 @@ func CheckTranslate(text string) string {
 }
 
 func GetPhrasalVerbs() string {
-	phrasalVerbsParticles := GetParticles()
+	phrasalVerbsParticles := wordsUtil.GetParticles()
 	if len(phrasalVerbsParticles) == 0 {
 		return ""
 	}

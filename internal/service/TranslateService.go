@@ -1,38 +1,40 @@
-package wordsUtil
+package service
 
 import (
-	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/database"
+	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/internal/database/SqlQueries"
+	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/internal/database/bdService"
+	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/internal/wordsUtil"
 	"strings"
 )
 
 var currentWord = ""
 var currentTranslate = ""
 
-func CheckWordInBase(text string) string {
+func CheckWordInBase(text string) (string, bool) {
 
-	answer := database.GetRequest(CheckWord(text))
+	answer := bdService.GetRequest(SqlQueries.CheckWord(text))
 	mystr := ""
 	if len(answer) != 0 {
 		for _, s := range answer {
-			mystr = getTranslatedString(strings.Split(s, ";"))
+			mystr = wordsUtil.GetTranslatedString(strings.Split(s, ";"))
 		}
-		return mystr
+		return mystr, true
 	} else {
-		translate := Translate(text)
+		translate := wordsUtil.Translate(text)
 		mystr = "Cлова \"" + text + "\" с переводом \"" + translate + "\" нет в словаре! Добавить?"
 		currentWord = text
 		currentTranslate = translate
-		return mystr
+		return mystr, false
 	}
 }
 
 func CheckTranslateInBase(text string) string {
 	mystr := ""
-	answer := database.GetRequest(CheckTranslate(text))
+	answer := bdService.GetRequest(SqlQueries.CheckTranslate(text))
 	if len(answer) != 0 {
 		for _, s := range answer {
 			//translates := strings.Split(s, ";")
-			mystr = mystr + getTranslatedString(strings.Split(s, ";")) + "\n"
+			mystr = mystr + wordsUtil.GetTranslatedString(strings.Split(s, ";")) + "\n"
 		}
 	}
 	return mystr
@@ -43,7 +45,7 @@ func AddNewWordResult(username string, add bool) string {
 		return "Сначала введите слово"
 	}
 	if add {
-		answer := database.GetRequestInsert(AddNewWord(currentWord, currentTranslate, username))
+		answer := bdService.GetRequestInsert(SqlQueries.AddNewWord(currentWord, currentTranslate, username))
 		if answer && currentWord != "" && currentTranslate != "" {
 			return "Слово успешно добавлено"
 		} else {

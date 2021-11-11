@@ -11,7 +11,7 @@ func GetResultStr(answer []string, showContext bool) string {
 	}
 	for _, s := range answer {
 
-		resultStr += strings.ToLower(getTranslatedString(strings.Split(s, ";")) + "\n")
+		resultStr += strings.ToLower(GetTranslatedString(strings.Split(s, ";")) + "\n")
 	}
 	if showContext {
 		arr := strings.Split(answer[len(answer)-1], ";")
@@ -20,7 +20,7 @@ func GetResultStr(answer []string, showContext bool) string {
 	return resultStr
 }
 
-func getTranslatedString(arr []string) string {
+func GetTranslatedString(arr []string) string {
 	mystr := ""
 	if len(arr) == 0 {
 		return mystr

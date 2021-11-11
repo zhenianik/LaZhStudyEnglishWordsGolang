@@ -32,12 +32,11 @@ func GetConfig() (*Config, error) {
 
 	once.Do(func() {
 
-		viper.SetDefault("config", "config.yaml")
 		viper.AutomaticEnv()
 
 		config = Config{}
 
-		if err = parseYamlConfig(&config, "config"); err != nil {
+		if err = parseYamlConfig(&config, "config.yaml"); err != nil {
 			log.Fatal(err)
 		}
 	})
@@ -45,13 +44,12 @@ func GetConfig() (*Config, error) {
 	return &config, err
 }
 
-func parseYamlConfig(cfg interface{}, viperConfigName string) error {
-	filePath := viper.GetString(viperConfigName)
-	if len(filePath) == 0 {
+func parseYamlConfig(cfg interface{}, fileName string) error {
+	if len(fileName) == 0 {
 		return errors.New("config file not found")
 	}
 
-	filePath, err := filepath.Abs(filePath)
+	filePath, err := filepath.Abs(fileName)
 
 	if err != nil {
 		return err
