@@ -58,7 +58,7 @@ func GetRequest(sqlText string) []string {
 		log.Printf("ошибка соединения с бд: %v", err)
 	}
 
-	output := []string{}
+	var output []string
 
 	results, err := db.Query(sqlText)
 	defer results.Close()

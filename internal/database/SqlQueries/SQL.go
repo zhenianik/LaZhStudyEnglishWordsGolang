@@ -60,3 +60,7 @@ func AddNewWord(text, translate1, context string) string {
 	return "INSERT INTO `words` (`id_word`, `word`, `translate1`, `translate2`, `translate3`, `translate4`, `context`) " +
 		"VALUES (NULL, '" + text + "', '" + translate1 + "', '', '', '', '" + context + "')"
 }
+
+func GetUser(userName string) string {
+	return "SELECT name from users where TRIM(name) = '" + userName + "'"
+}

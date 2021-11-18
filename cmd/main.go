@@ -6,6 +6,7 @@ import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/cmd/bot/handlers"
 	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/config"
+	"github.com/zhenianik/LaZhStudyEnglishWordsGolang/internal/service"
 	"log"
 )
 
@@ -41,11 +42,23 @@ func run() error {
 		return fmt.Errorf("не удалось получить канал с обновлениями: %w", err)
 	}
 
+	userName := ""
 	for update := range updates {
-		if update.CallbackQuery != nil {
-			go handlers.CallbackHandler(bot, update.CallbackQuery)
-		} else if update.Message != nil {
-			go handlers.MessageHandler(bot, update.Message)
+		if update.Message == nil {
+			userName = update.CallbackQuery.From.UserName
+		} else {
+			userName = update.Message.From.UserName
+		}
+
+		if service.CheckUserPermission(userName) == false {
+			errorStr := fmt.Sprintf("у пользователя: %s нет разрешений на использование бота", userName)
+			go handlers.UserHandler(bot, update.Message, update.CallbackQuery, errorStr)
+		} else {
+			if update.CallbackQuery != nil {
+				go handlers.CallbackHandler(bot, update.CallbackQuery)
+			} else if update.Message != nil {
+				go handlers.MessageHandler(bot, update.Message)
+			}
 		}
 	}
 
