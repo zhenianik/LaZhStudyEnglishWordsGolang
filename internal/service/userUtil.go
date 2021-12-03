@@ -6,6 +6,7 @@ import (
 )
 
 func CheckUserPermission(u string) bool {
-	queryString := SqlQueries.GetUser(u)
-	return len(bdService.GetRequest(queryString)) > 0
+	queryString := SqlQueries.GetUser()
+	param := []interface{}{u}
+	return len(bdService.GetRequest(queryString, param)) > 0
 }

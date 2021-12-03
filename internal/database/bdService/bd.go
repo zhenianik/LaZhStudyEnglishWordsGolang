@@ -51,7 +51,7 @@ func checkConnect() error {
 	return nil
 }
 
-func GetRequest(sqlText string) []string {
+func GetRequest(sqlText string, params []interface{}) []string {
 
 	err := checkConnect()
 	if err != nil {
@@ -60,7 +60,9 @@ func GetRequest(sqlText string) []string {
 
 	var output []string
 
-	results, err := db.Query(sqlText)
+	var results *sql.Rows
+	results, err = db.Query(sqlText, params...)
+
 	defer results.Close()
 
 	if err != nil {
@@ -82,14 +84,14 @@ func GetRequest(sqlText string) []string {
 	return output
 }
 
-func GetRequestInsert(sqlText string) bool {
+func GetRequestInsert(sqlText string, params []interface{}) bool {
 
 	err := checkConnect()
 	if err != nil {
 		log.Printf("ошибка соединения с бд: %v", err)
 	}
 
-	insert, err := db.Query(sqlText)
+	insert, err := db.Query(sqlText, params...)
 	if err != nil {
 		log.Printf("ошибка выполнения запроса вставки данных: %v", err)
 	}

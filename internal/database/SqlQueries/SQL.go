@@ -26,13 +26,13 @@ func GetLastWords() string {
 	return "SELECT word, translate1, translate2, translate3, translate4, context from words ORDER BY `id_word` DESC LIMIT 30"
 }
 
-func CheckWord(text string) string {
-	return "SELECT word, translate1, translate2, translate3, translate4, context from words where TRIM(word) = '" + text + "'"
+func CheckWord() string {
+	return "SELECT word, translate1, translate2, translate3, translate4, context from words where TRIM(word) = ?"
 }
 
-func CheckTranslate(text string) string {
+func CheckTranslate() string {
 	return "SELECT word, translate1, translate2, translate3, translate4, context from words " +
-		"where TRIM(translate1) = '" + text + "'" + " OR TRIM(translate2) = '" + text + "'" + " OR TRIM(translate3) = '" + text + "'" + " OR TRIM(translate4) = '" + text + "'"
+		"where TRIM(translate1) = ? OR TRIM(translate2) = ? OR TRIM(translate3) = ? OR TRIM(translate4) = ? "
 }
 
 func GetPhrasalVerbs() string {
@@ -56,11 +56,11 @@ func GetPhrasalVerbs() string {
 	return query
 }
 
-func AddNewWord(text, translate1, context string) string {
+func AddNewWord() string {
 	return "INSERT INTO `words` (`id_word`, `word`, `translate1`, `translate2`, `translate3`, `translate4`, `context`) " +
-		"VALUES (NULL, '" + text + "', '" + translate1 + "', '', '', '', '" + context + "')"
+		"VALUES (NULL, ?, ?, '', '', '', ?)"
 }
 
-func GetUser(userName string) string {
-	return "SELECT name from users where TRIM(name) = '" + userName + "'"
+func GetUser() string {
+	return "SELECT name from users where TRIM(name) = ?"
 }

@@ -12,7 +12,7 @@ var currentTranslate = ""
 
 func CheckWordInBase(text string) (string, bool) {
 
-	answer := bdService.GetRequest(SqlQueries.CheckWord(text))
+	answer := bdService.GetRequest(SqlQueries.CheckWord(), []interface{}{text})
 	mystr := ""
 	if len(answer) != 0 {
 		for _, s := range answer {
@@ -30,7 +30,7 @@ func CheckWordInBase(text string) (string, bool) {
 
 func CheckTranslateInBase(text string) string {
 	mystr := ""
-	answer := bdService.GetRequest(SqlQueries.CheckTranslate(text))
+	answer := bdService.GetRequest(SqlQueries.CheckTranslate(), []interface{}{text, text, text, text})
 	if len(answer) != 0 {
 		for _, s := range answer {
 			//translates := strings.Split(s, ";")
@@ -45,7 +45,7 @@ func AddNewWordResult(username string, add bool) string {
 		return "Сначала введите слово"
 	}
 	if add {
-		answer := bdService.GetRequestInsert(SqlQueries.AddNewWord(currentWord, currentTranslate, username))
+		answer := bdService.GetRequestInsert(SqlQueries.AddNewWord(), []interface{}{currentWord, currentTranslate, username})
 		if answer && currentWord != "" && currentTranslate != "" {
 			return "Слово успешно добавлено"
 		} else {

@@ -15,23 +15,23 @@ func CallbackHandler(bot *tgbotapi.BotAPI, callback *tgbotapi.CallbackQuery) {
 	switch callback.Data {
 	case "/test":
 		queryString := SqlQueries.GetRandomWords()
-		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString), false)
+		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString, []interface{}{}), false)
 		sndMsg.ReplyMarkup = buttons.MainCommands()
 	case "/last":
 		queryString := SqlQueries.GetLastWords()
-		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString), false)
+		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString, []interface{}{}), false)
 		sndMsg.ReplyMarkup = buttons.MainCommands()
 	case "/testLast":
 		queryString := SqlQueries.GetRandomWordsFromLast()
-		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString), false)
+		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString, []interface{}{}), false)
 		sndMsg.ReplyMarkup = buttons.MainCommands()
 	case "/video":
 		queryString := SqlQueries.GetRandomVideo()
-		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString), true)
+		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString, []interface{}{}), true)
 		sndMsg.ReplyMarkup = buttons.MainCommands()
 	case "/phV":
 		queryString := SqlQueries.GetPhrasalVerbs()
-		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString), false)
+		sndMsg.Text = wordsUtil.GetResultStr(bdService.GetRequest(queryString, []interface{}{}), false)
 		sndMsg.ReplyMarkup = buttons.MainCommands()
 	case "/yes":
 		sndMsg.Text = service.AddNewWordResult(callback.From.UserName, true)
