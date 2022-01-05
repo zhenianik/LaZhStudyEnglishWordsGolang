@@ -30,7 +30,7 @@ func run() error {
 		return fmt.Errorf("не удалось подключиться к телеграм боту: %w", err)
 	}
 
-	bot.Debug = true
+	bot.Debug = cfg.TelegramBotDebug
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 

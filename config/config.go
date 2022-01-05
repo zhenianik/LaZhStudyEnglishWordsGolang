@@ -23,6 +23,7 @@ type Config struct {
 	Dbport              string `mapstructure:"DBPORT"`
 	TelegramBotToken    string `mapstructure:"TELEGRAM_BOT_TOKEN"`
 	TelegramBotUsername string `mapstructure:"TELEGRAM_BOT_USERNAME"`
+	TelegramBotDebug    bool   `mapstructure:"TELEGRAM_BOT_DEBUG"`
 	TranslateUrl        string `mapstructure:"TRANSLATE_URL"`
 }
 
